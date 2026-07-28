@@ -6,6 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { SettingsPanel } from './components/SettingsPanel'
 import { StringSelector } from './components/StringSelector'
 import { TunerDial } from './components/TunerDial'
+import { TuningMenu } from './components/TuningMenu'
 import { playReferenceTone, stopReferenceTone } from './audio/referenceTone'
 import {
   centsBetween,
@@ -218,18 +219,10 @@ function App() {
           </div>
 
           <div className="stage-footer">
-            <span>SELECTED TUNING</span>
-            <select
-              aria-label="Selected tuning"
+            <TuningMenu
               value={settings.tuningId}
-              onChange={(event) => setSettings({ ...settings, tuningId: event.target.value })}
-            >
-              {TUNINGS.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name} · {item.shortName}
-                </option>
-              ))}
-            </select>
+              onChange={(tuningId) => setSettings({ ...settings, tuningId })}
+            />
           </div>
         </section>
 
