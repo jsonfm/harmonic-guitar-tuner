@@ -26,21 +26,22 @@ interface StringPathProps {
 }
 
 const metalMaterial = {
-  color: '#b9b29f',
-  metalness: 0.94,
-  roughness: 0.2,
+  color: '#a49b8b',
+  metalness: 0.96,
+  roughness: 0.18,
 } as const
 
 function createHeadstockShape() {
   const shape = new Shape()
-  shape.moveTo(-0.48, -1.76)
-  shape.bezierCurveTo(-0.5, -1.1, -0.56, -0.55, -0.67, 0.02)
-  shape.bezierCurveTo(-0.78, 0.58, -0.78, 1.12, -0.6, 1.56)
-  shape.bezierCurveTo(-0.5, 1.8, -0.29, 1.93, -0.12, 1.78)
-  shape.quadraticCurveTo(0, 1.67, 0.12, 1.78)
-  shape.bezierCurveTo(0.29, 1.93, 0.5, 1.8, 0.6, 1.56)
-  shape.bezierCurveTo(0.78, 1.12, 0.78, 0.58, 0.67, 0.02)
-  shape.bezierCurveTo(0.56, -0.55, 0.5, -1.1, 0.48, -1.76)
+  shape.moveTo(-0.42, -1.78)
+  shape.bezierCurveTo(-0.45, -1.08, -0.51, -0.46, -0.59, 0.18)
+  shape.lineTo(-0.68, 1.23)
+  shape.quadraticCurveTo(-0.7, 1.52, -0.48, 1.67)
+  shape.quadraticCurveTo(-0.1, 1.89, 0.34, 1.74)
+  shape.quadraticCurveTo(0.66, 1.65, 0.69, 1.38)
+  shape.quadraticCurveTo(0.7, 1.26, 0.68, 1.14)
+  shape.lineTo(0.59, 0.18)
+  shape.bezierCurveTo(0.51, -0.46, 0.45, -1.08, 0.42, -1.78)
   shape.closePath()
   return shape
 }
@@ -53,10 +54,10 @@ function StringPath({ index, active, status, inputLevel, intensity, pegX, pegY }
   const points = useMemo(
     () =>
       [
-        [nutX, -2.28, 0.36],
-        [nutX, -1.58, 0.36],
-        [nutX + (pegX - nutX) * 0.32, pegY - 0.42, 0.36],
-        [pegX, pegY, 0.36],
+        [nutX, -2.28, 0.34],
+        [nutX, -1.58, 0.34],
+        [nutX + (pegX - nutX) * 0.18, -1.18, 0.34],
+        [pegX, pegY, 0.34],
       ] as [number, number, number][],
     [nutX, pegX, pegY],
   )
@@ -65,7 +66,7 @@ function StringPath({ index, active, status, inputLevel, intensity, pegX, pegY }
     if (!stringGroup.current) return
     const energy = active ? Math.max(0.1, inputLevel) * intensity : 0
     const speed = tuned ? 6 : 15 + index
-    stringGroup.current.position.x = Math.sin(clock.elapsedTime * speed) * energy * 0.008
+    stringGroup.current.position.x = Math.sin(clock.elapsedTime * speed) * energy * 0.006
     stringGroup.current.position.z = active ? 0.008 + energy * 0.01 : 0
   })
 
@@ -73,19 +74,19 @@ function StringPath({ index, active, status, inputLevel, intensity, pegX, pegY }
     <group ref={stringGroup}>
       <Line
         points={points}
-        color={active ? activeColor : index < 3 ? '#9b8061' : '#a7a094'}
-        lineWidth={active ? 1.85 : 0.8 + (5 - index) * 0.12}
+        color={active ? activeColor : index < 3 ? '#9d8668' : '#aaa59a'}
+        lineWidth={active ? 1.6 : 0.66 + (5 - index) * 0.1}
         transparent
         opacity={active ? 1 : 0.72}
       />
-      <mesh position={[pegX, pegY, 0.365]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.09, 0.009, 8, 30]} />
+      <mesh position={[pegX, pegY, 0.352]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.06, 0.006, 8, 30]} />
         <meshStandardMaterial
           color={active ? activeColor : '#827865'}
           emissive={active ? activeColor : '#000000'}
-          emissiveIntensity={active ? 0.9 : 0}
-          metalness={0.85}
-          roughness={0.28}
+          emissiveIntensity={active ? 0.8 : 0}
+          metalness={0.88}
+          roughness={0.25}
         />
       </mesh>
     </group>
@@ -95,35 +96,35 @@ function StringPath({ index, active, status, inputLevel, intensity, pegX, pegY }
 function TuningMachine({ x, y, side }: { x: number; y: number; side: -1 | 1 }) {
   return (
     <group position={[x, y, 0.04]}>
-      <mesh position={[0, 0, 0.25]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.135, 0.135, 0.115, 32]} />
-        <meshStandardMaterial {...metalMaterial} />
+      <mesh position={[0, 0, 0.265]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.102, 0.102, 0.07, 32]} />
+        <meshStandardMaterial color="#8b806e" metalness={0.95} roughness={0.2} />
       </mesh>
-      <mesh position={[0, 0, 0.326]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.062, 0.062, 0.16, 24]} />
-        <meshStandardMaterial color="#d7d0bd" metalness={0.96} roughness={0.16} />
+      <mesh position={[0, 0, 0.335]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.047, 0.047, 0.15, 24]} />
+        <meshPhysicalMaterial color="#c2ab82" metalness={0.96} roughness={0.14} clearcoat={0.5} />
       </mesh>
-      <mesh position={[side * 0.075, 0, -0.11]}>
-        <sphereGeometry args={[0.15, 20, 14]} />
-        <meshStandardMaterial color="#625f58" metalness={0.9} roughness={0.25} />
-      </mesh>
-      <mesh position={[side * 0.27, 0, -0.11]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.32, 14]} />
+      <RoundedBox
+        args={[0.19, 0.24, 0.12]}
+        radius={0.05}
+        smoothness={3}
+        position={[side * 0.085, 0, -0.1]}
+      >
+        <meshStandardMaterial color="#51483e" metalness={0.88} roughness={0.25} />
+      </RoundedBox>
+      <mesh position={[side * 0.245, 0, -0.1]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.032, 0.032, 0.28, 14]} />
         <meshStandardMaterial {...metalMaterial} />
       </mesh>
       <RoundedBox
-        args={[0.19, 0.34, 0.11]}
-        radius={0.07}
+        args={[0.15, 0.28, 0.1]}
+        radius={0.055}
         smoothness={4}
-        position={[side * 0.47, 0, -0.11]}
+        position={[side * 0.415, 0, -0.1]}
         rotation={[0, 0, side * 0.07]}
       >
-        <meshPhysicalMaterial color="#d2cbb9" metalness={0.92} roughness={0.18} clearcoat={0.5} />
+        <meshPhysicalMaterial color="#6d5741" metalness={0.82} roughness={0.22} clearcoat={0.7} />
       </RoundedBox>
-      <mesh position={[side * 0.055, 0.095, 0.317]}>
-        <sphereGeometry args={[0.012, 10, 8]} />
-        <meshStandardMaterial color="#45443f" metalness={0.9} />
-      </mesh>
     </group>
   )
 }
@@ -132,15 +133,14 @@ function Instrument(props: SceneProps) {
   const group = useRef<Group>(null)
   const headstockShape = useMemo(createHeadstockShape, [])
   const pegPositions = useMemo(
-    () =>
-      Array.from({ length: 6 }, (_, index) => {
-        const side = (index % 2 === 0 ? -1 : 1) as -1 | 1
-        return {
-          side,
-          x: side * (0.55 + Math.floor(index / 2) * 0.035),
-          y: 1.23 - Math.floor(index / 2) * 0.8,
-        }
-      }),
+    () => [
+      { side: -1 as const, x: -0.55, y: -0.47 },
+      { side: -1 as const, x: -0.59, y: 0.35 },
+      { side: -1 as const, x: -0.63, y: 1.17 },
+      { side: 1 as const, x: 0.64, y: 1.17 },
+      { side: 1 as const, x: 0.59, y: 0.35 },
+      { side: 1 as const, x: 0.55, y: -0.47 },
+    ],
     [],
   )
   const extrudeSettings = useMemo(
@@ -169,71 +169,61 @@ function Instrument(props: SceneProps) {
   useFrame(({ clock, pointer }) => {
     if (!group.current) return
     const lean = Math.max(-1, Math.min(1, props.cents / 50))
-    group.current.rotation.z = -0.075 + lean * 0.025
-    group.current.rotation.y = -0.12 + pointer.x * 0.045 * props.intensity
-    group.current.rotation.x = -0.045 + pointer.y * 0.018 * props.intensity
-    group.current.position.y = Math.sin(clock.elapsedTime * 0.65) * 0.014 * props.intensity
+    group.current.rotation.z = -0.055 + lean * 0.02
+    group.current.rotation.y = -0.16 + pointer.x * 0.035 * props.intensity
+    group.current.rotation.x = -0.04 + pointer.y * 0.014 * props.intensity
+    group.current.position.y = Math.sin(clock.elapsedTime * 0.65) * 0.012 * props.intensity
   })
 
   return (
-    <Float speed={0.55} rotationIntensity={0.015} floatIntensity={0.06}>
-      <group ref={group} rotation={[-0.045, -0.12, -0.075]} position={[0.25, 0.05, 0]} scale={0.92}>
-        <mesh position={[0, 0, -0.18]}>
+    <Float speed={0.5} rotationIntensity={0.012} floatIntensity={0.05}>
+      <group ref={group} rotation={[-0.04, -0.16, -0.055]} position={[0.24, 0.02, 0]} scale={0.91}>
+        <mesh position={[0, 0, -0.2]} scale={[1.025, 1.015, 1]}>
           <extrudeGeometry args={[headstockShape, extrudeSettings]} />
           <meshPhysicalMaterial
-            color="#24140f"
-            roughness={0.34}
+            color="#20130e"
+            roughness={0.31}
             metalness={0.03}
-            clearcoat={0.48}
-            clearcoatRoughness={0.25}
-          />
-        </mesh>
-
-        <mesh position={[0, 0, 0.11]} scale={[0.94, 0.96, 1]}>
-          <extrudeGeometry args={[headstockShape, veneerSettings]} />
-          <meshPhysicalMaterial
-            color="#6f321d"
-            roughness={0.27}
-            metalness={0.02}
-            clearcoat={0.92}
-            clearcoatRoughness={0.16}
-          />
-        </mesh>
-
-        <mesh position={[0, -0.02, 0.188]} scale={[0.87, 0.94, 1]}>
-          <extrudeGeometry args={[headstockShape, veneerSettings]} />
-          <meshPhysicalMaterial
-            color="#3b1d15"
-            roughness={0.36}
-            metalness={0.04}
-            clearcoat={0.72}
+            clearcoat={0.65}
             clearcoatRoughness={0.2}
           />
         </mesh>
 
-        <RoundedBox args={[0.86, 0.84, 0.055]} radius={0.16} position={[0, -0.19, 0.288]}>
-          <meshPhysicalMaterial color="#1c1815" metalness={0.5} roughness={0.24} clearcoat={0.6} />
-        </RoundedBox>
-
-        <mesh position={[0, 0.68, 0.33]}>
-          <ringGeometry args={[0.115, 0.137, 48]} />
-          <meshStandardMaterial
-            color={props.status === 'in-tune' ? '#d8ff7c' : '#d39a55'}
-            emissive={props.status === 'in-tune' ? '#85bd27' : '#552713'}
-            emissiveIntensity={props.status === 'in-tune' ? 1.5 : 0.5}
-            metalness={0.78}
-            roughness={0.22}
+        <mesh position={[0, 0, 0.09]} scale={[0.975, 0.982, 1]}>
+          <extrudeGeometry args={[headstockShape, veneerSettings]} />
+          <meshPhysicalMaterial
+            color="#a7622f"
+            roughness={0.24}
+            metalness={0.08}
+            clearcoat={0.88}
+            clearcoatRoughness={0.13}
           />
         </mesh>
-        <mesh position={[0, 0.68, 0.334]}>
-          <circleGeometry args={[0.055, 32]} />
-          <meshStandardMaterial color="#0f1010" metalness={0.55} roughness={0.3} />
+
+        <mesh position={[0, -0.01, 0.17]} scale={[0.935, 0.955, 1]}>
+          <extrudeGeometry args={[headstockShape, veneerSettings]} />
+          <meshPhysicalMaterial
+            color="#4b281a"
+            roughness={0.29}
+            metalness={0.03}
+            clearcoat={0.88}
+            clearcoatRoughness={0.16}
+          />
         </mesh>
-        {[-0.038, 0, 0.038].map((x, index) => (
-          <mesh key={x} position={[x, 0.68, 0.344]}>
-            <boxGeometry args={[index === 1 ? 0.009 : 0.006, index === 1 ? 0.082 : 0.048, 0.008]} />
-            <meshStandardMaterial color={index === 1 ? '#efae62' : '#77624b'} metalness={0.7} />
-          </mesh>
+
+        {[-0.31, -0.18, -0.03, 0.13, 0.29].map((x, index) => (
+          <Line
+            key={x}
+            points={[
+              [x, -1.46, 0.26],
+              [x + (index % 2 === 0 ? 0.025 : -0.02), 0.1, 0.26],
+              [x + (index % 2 === 0 ? -0.012 : 0.03), 1.43, 0.26],
+            ]}
+            color={index % 2 === 0 ? '#27140f' : '#7a4027'}
+            lineWidth={0.35}
+            transparent
+            opacity={0.34}
+          />
         ))}
 
         <RoundedBox args={[0.86, 0.78, 0.27]} radius={0.08} position={[0, -2.0, -0.01]}>
@@ -265,13 +255,6 @@ function Instrument(props: SceneProps) {
             pegY={pegPositions[index].y}
           />
         ))}
-
-        {[-1, 1].map((side) => (
-          <mesh key={side} position={[side * 0.39, -0.12, 0.31]}>
-            <boxGeometry args={[0.015, 2.45, 0.025]} />
-            <meshStandardMaterial color="#a65c2d" emissive="#3e160b" emissiveIntensity={0.3} />
-          </mesh>
-        ))}
       </group>
     </Float>
   )
@@ -285,19 +268,19 @@ export default function TunerScene(props: SceneProps) {
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       frameloop={document.hidden ? 'demand' : 'always'}
     >
-      <ambientLight intensity={0.42} />
-      <directionalLight position={[3.5, 4.5, 5]} intensity={2.6} color="#ffe0b8" />
-      <directionalLight position={[-2.5, 1, 3]} intensity={1.2} color="#a64a28" />
-      <pointLight position={[-3, -2, 2]} intensity={4.8} distance={7} color="#d16b35" />
-      <pointLight position={[2.3, 2.2, 2]} intensity={3.5} distance={6} color="#d0ff72" />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[3.5, 4.5, 5]} intensity={3.1} color="#ffe1ba" />
+      <directionalLight position={[-2.5, 1, 3]} intensity={0.9} color="#a64a28" />
+      <pointLight position={[-3, -2, 2]} intensity={3.8} distance={7} color="#d16b35" />
+      <pointLight position={[2.3, 2.2, 2]} intensity={2.8} distance={6} color="#d0ff72" />
       <Instrument {...props} />
       {!props.reducedEffects && (
         <Sparkles
-          count={22}
+          count={18}
           scale={[3.8, 5, 2]}
-          size={0.8}
-          speed={0.12 + props.inputLevel * 0.45}
-          opacity={0.16}
+          size={0.75}
+          speed={0.1 + props.inputLevel * 0.4}
+          opacity={0.13}
           color="#f3c786"
         />
       )}
